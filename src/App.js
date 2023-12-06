@@ -47,6 +47,7 @@ function App() {
 
   return (
    <div>
+      <h3 className="mb-3">React Wallet</h3>
       {initLoad === 'Loading' || initLoad === ''? <h1>Loading</h1> :
        initLoad === 'NoMetamask' ? <h1>No Metamask</h1> :
        (
