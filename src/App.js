@@ -20,16 +20,16 @@ function App() {
   useEffect(() => {
     setInitLoad('Loading');
 
-    // let checkAccount = _checkMetamask(window.ethereum);
-    // checkAccount.then((accountResult) => {
-    //   setDefaultState(accountResult);
+    let checkAccount = _checkMetamask(window.ethereum);
+    checkAccount.then((accountResult) => {
+      setDefaultState(accountResult);
 
-    //   if (accountResult != null) {
-    //     setInitLoad('Done');
-    //   } else {
-    //     setInitLoad('NoMetamask');
-    //   }
-    // });
+      if (accountResult != null) {
+        setInitLoad('Done');
+      } else {
+        setInitLoad('NoMetamask');
+      }
+    });
 
     
   }, [setDefaultState]);  
