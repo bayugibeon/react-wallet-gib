@@ -4,8 +4,8 @@ import NFT from '../model/NFTData';
 import {_promiseArrayResolver, _debug, _checkApproval, _setApproval,
   _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions';
 import {Supplier} from './Supplier';
-import {Collections} from './Users';
-import {Wallets} from './Wallets';
+// import {Collections} from './Users';
+// import {Wallets} from './Wallets';
 
 export let NFTSupplier = [];
 export let NFTBalance = [];
