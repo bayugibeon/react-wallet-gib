@@ -51,9 +51,9 @@ function App() {
       {initLoad === 'Loading' || initLoad === ''? <h1>Loading</h1> :
        initLoad === 'NoMetamask' ? <h1>No Metamask</h1> :
        (
-        <NetworkContextProvider metaProvider={MetamaskNetwork} mainProvider={MainNetwork} account={account}>
+        {/* <NetworkContextProvider metaProvider={MetamaskNetwork} mainProvider={MainNetwork} account={account}>
             <Body />
-        </NetworkContextProvider>
+        </NetworkContextProvider> */}
        )
       }
     </div>
