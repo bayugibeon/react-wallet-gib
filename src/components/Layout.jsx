@@ -133,13 +133,13 @@ function ContentSupplier(){
 function ContentUsers(){
   return (
       <div className="tab-pane" id="users">
-        <Collections />
+        {/* <Collections /> */}
     </div>);
 }
 
 function ContentWallets(){
   return (
       <div className="tab-pane" id="wallets">
-        <Wallets />
+        {/* <Wallets /> */}
     </div>);
 }
