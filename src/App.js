@@ -20,29 +20,29 @@ function App() {
   useEffect(() => {
     setInitLoad('Loading');
 
-    let checkAccount = _checkMetamask(window.ethereum);
-    checkAccount.then((accountResult) => {
-      setDefaultState(accountResult);
+    // let checkAccount = _checkMetamask(window.ethereum);
+    // checkAccount.then((accountResult) => {
+    //   setDefaultState(accountResult);
 
-      if (accountResult != null) {
-        setInitLoad('Done');
-      } else {
-        setInitLoad('NoMetamask');
-      }
-    });
+    //   if (accountResult != null) {
+    //     setInitLoad('Done');
+    //   } else {
+    //     setInitLoad('NoMetamask');
+    //   }
+    // });
 
     
   }, [setDefaultState]);  
 
 
-  if (defaultState != null && defaultState != "") {
-    MetamaskNetwork = new NetworkClass(window.ethereum, null, AbiFile, process.env.REACT_APP_CONTRACT);
-    MainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
-      process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
+  // if (defaultState != null && defaultState != "") {
+  //   MetamaskNetwork = new NetworkClass(window.ethereum, null, AbiFile, process.env.REACT_APP_CONTRACT);
+  //   MainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
+  //     process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
   
-    account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
+  //   account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
   
-  }
+  // }
 
 
   return (
