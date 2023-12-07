@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@ethersproject/providers": "^5.7.2",
     "@metamask/sdk-react": "^0.14.0",
+    "@metamask/sdk-react-ui": "^0.14.1",
     "@mui/material": "^5.14.19",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

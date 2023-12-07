@@ -1,4 +1,5 @@
 import React, {createContext, useContext} from 'react';
+import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 
 const MetamaskNetContext = createContext();
 const MainNetContext = createContext();
@@ -10,15 +11,24 @@ export function NetworkContextProvider({metaProvider, mainProvider, account, chi
     // console.log(metaProvider);
   
     return(
-        <MetamaskNetContext.Provider value={metaProvider}>
+        <MetaMaskUIProvider sdkOptions={{
+                dappMetadata: {
+                name: "React Wallet Metamask",
+                }
+            }}>
             <MainNetContext.Provider value={mainProvider}>
                 <AccountContext.Provider value={account}>
                     {children}
                 </AccountContext.Provider>
             </MainNetContext.Provider>
-        </MetamaskNetContext.Provider>    
+        {/* <MetamaskNetContext.Provider value={metaProvider}>
+        </MetamaskNetContext.Provider>     */}
+        </MetaMaskUIProvider>
     );
 }
+
+
+
 
 
 export function GetMetaNet() {

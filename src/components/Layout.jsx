@@ -17,8 +17,7 @@ export function Body() {
   const metaNet = GetMetaNet();
   const mainNet = GetMainNet();
   
-  GetNFTs(metaNet.contract);
-
+  // GetNFTs(metaNet.contract);
 
     return (
         <div>
