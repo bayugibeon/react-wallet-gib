@@ -11,18 +11,19 @@ import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 
 const App = () => {
-  return (
-    <MetaMaskUIProvider sdkOptions={{
-      dappMetadata: {
-        name: "Demo UI React App",
-      }
-    }}>
-      <div className="App">
-        <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
-      </div>
-    </MetaMaskUIProvider>
+  // let MainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
+  //     process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
+  // let account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
+  const [account, setAccount] = useState("");
+  const currentAccount = { account, setAccount };
 
-  );
+  return (
+        <NetworkContextProvider currentAccount={currentAccount}>
+                <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+                {/* <Body /> */}
+        </NetworkContextProvider>
+
+    );
 };
 // function App() {
 //   const [initLoad, setInitLoad] = useState('Done');
