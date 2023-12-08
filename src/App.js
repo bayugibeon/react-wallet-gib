@@ -10,6 +10,7 @@ import {ConnectWalletButton} from './components/Wallets';
 import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 import detectEthereumProvider from '@metamask/detect-provider';
+import { useSDK } from '@metamask/sdk-react';
 import Button from '@mui/material/Button';
 import { GetMetaNet } from './components/Context';
 
@@ -18,10 +19,11 @@ const App = () => {
   //     process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
   // let account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
 
-  const [account, setAccount] = useState("");
+  const [curAccount, setcurAccount] = useState("");
   const currentAccount = { account, setAccount };
 
   const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
+  const { sdk, connected, connecting, provider, chainId, account, balance } = useSDK();
 
   const [contextReady, setContextReady] = useState();
 
@@ -61,30 +63,31 @@ const App = () => {
   
   },[account]);
 
-  const connect = () => {
-        // _checkMetamask(window.ethereum).then((result) => {
-        //   setAccount(result);
-        // });
-
-
-  }
+  const connect = async () => {
+    try {
+      await sdk?.connect();
+    } catch (err) {
+      console.warn(`failed to connect..`, err);
+    }
+  };
 
   return (
-    <MetaMaskUIProvider sdkOptions={{
-      useDeeplink: true,
-      dappMetadata: {
-      name: process.env.REACT_APP_METADATA_NAME,
-      }
-  }}>
-                  <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+    <>
+      <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
+        Connect
+      </button>
+      <p>Account : {account}</p>
+      <p>Chain : {chainId}</p>
+    </>
+
+                  {/* <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
                 {
                   (isMetamaskInstalled === false) ?  <></>
                   :
                   <Button variant="outlined" onClick={() => connect()}>Connect</Button>
 
                 }
-                <h4>Current Account : {account}</h4>
-  </MetaMaskUIProvider>
+                <h4>Current Account : {account}</h4> */}
 
 
     );
@@ -92,7 +95,16 @@ const App = () => {
 
 
 
-  {/* (account !== null && account !== "") ? 
+  {/* 
+  
+    <MetaMaskUIProvider sdkOptions={{
+      useDeeplink: true,
+      dappMetadata: {
+      name: process.env.REACT_APP_METADATA_NAME,
+      }
+  }}>
+  
+  (account !== null && account !== "") ? 
   <NetworkContextProvider account={account}>
     </NetworkContextProvider>  : <></> */}
 
