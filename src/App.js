@@ -73,12 +73,11 @@ const App = () => {
   }}>
                 <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
                 <h4>Current Account : {account}</h4>
-                {(account !== null && account !== "") ? 
-                <NetworkContextProvider account={account}>
-                  {/* <Body /> */}
-                  </NetworkContextProvider>  : <></>
-              }
-
+                {
+                  {/* (account !== null && account !== "") ? 
+                  <NetworkContextProvider account={account}>
+                    </NetworkContextProvider>  : <></> */}
+                }
   </MetaMaskUIProvider>
 
 
