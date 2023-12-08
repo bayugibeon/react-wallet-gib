@@ -80,14 +80,6 @@ const App = () => {
       <p>Chain : {chainId}</p>
     </>
 
-                  {/* <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
-                {
-                  (isMetamaskInstalled === false) ?  <></>
-                  :
-                  <Button variant="outlined" onClick={() => connect()}>Connect</Button>
-
-                }
-                <h4>Current Account : {account}</h4> */}
 
 
     );
@@ -96,6 +88,16 @@ const App = () => {
 
 
   {/* 
+                 
+                  <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+                {
+                  (isMetamaskInstalled === false) ?  <></>
+                  :
+                  <Button variant="outlined" onClick={() => connect()}>Connect</Button>
+
+                }
+                <h4>Current Account : {account}</h4> 
+              }
   
     <MetaMaskUIProvider sdkOptions={{
       useDeeplink: true,
