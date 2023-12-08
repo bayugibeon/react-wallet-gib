@@ -67,22 +67,23 @@ const App = () => {
 
   return (
     <MetaMaskUIProvider sdkOptions={{
+      useDeeplink: true,
       dappMetadata: {
       name: process.env.REACT_APP_METADATA_NAME,
       }
   }}>
                 <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
                 <h4>Current Account : {account}</h4>
-                {
-                  {/* (account !== null && account !== "") ? 
-                  <NetworkContextProvider account={account}>
-                    </NetworkContextProvider>  : <></> */}
-                }
   </MetaMaskUIProvider>
 
 
     );
 };
+
+  {/* (account !== null && account !== "") ? 
+  <NetworkContextProvider account={account}>
+    </NetworkContextProvider>  : <></> */}
+
 
 // function App() {
 //   const [initLoad, setInitLoad] = useState('Done');
