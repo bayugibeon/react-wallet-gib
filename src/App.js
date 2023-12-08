@@ -36,27 +36,7 @@ const App = () => {
       detection.then((result) => {
           if (result !== null && window.ethereum.isMetaMask) {
             setisMetamaskInstalled(true);
-
-            // _checkMetamask(window.ethereum).then((result) => {
-            //   setAccount(result);
-            // });
-
-            window.ethereum.request({ method: 'eth_accounts' })
-              .then(handleAccountsChanged)
-              .catch((err) => {
-                console.error(err);
-              });
-        
-            window.ethereum.on('accountsChanged', handleAccountsChanged);
-        
-            function handleAccountsChanged(accounts) {
-              if (accounts.length === 0) {
-              } else if (accounts[0] !== account) {
-                // setAccount(accounts[0]);
-              }
-            }
-          } else {
-          }    
+          }
       });
   
     } catch(e) { 
@@ -65,6 +45,28 @@ const App = () => {
   
   },[]);
 
+  const connect = () => {
+        // _checkMetamask(window.ethereum).then((result) => {
+        //   setAccount(result);
+        // });
+
+        window.ethereum.request({ method: 'eth_accounts' })
+          .then(handleAccountsChanged)
+          .catch((err) => {
+            console.error(err);
+          });
+    
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+    
+        function handleAccountsChanged(accounts) {
+          if (accounts.length === 0) {
+          } else if (accounts[0] !== account) {
+            setAccount(accounts[0]);
+          }
+        }
+
+  }
+
   return (
     <MetaMaskUIProvider sdkOptions={{
       useDeeplink: true,
@@ -72,13 +74,21 @@ const App = () => {
       name: process.env.REACT_APP_METADATA_NAME,
       }
   }}>
-                <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+                {
+                  (isMetamaskInstalled === false) ? 
+                  <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+                  :
+                  <Button variant="outlined" onClick={() => connect()}>Connect</Button>
+
+                }
                 <h4>Current Account : {account}</h4>
   </MetaMaskUIProvider>
 
 
     );
 };
+
+
 
   {/* (account !== null && account !== "") ? 
   <NetworkContextProvider account={account}>
