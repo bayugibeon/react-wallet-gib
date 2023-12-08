@@ -7,38 +7,16 @@ import {_promiseArrayResolver, _debug, _checkApproval, _setApproval,
 import {NFTSupplier, NFTBalance, NFTs} from './Layout';
 
 export function Supplier() {
-  // const [metamaskState, setMetamaskState] = useState('');
-
-  const connect = (e) => {
-    e.preventDefault()
-  }
 
   return (
         <div>
-          <div className="App">
-            <MetamaskConnectButton />
-          </div>
-
-          {/* <MetaMaskButton theme={"light"} color="white" onClick={() => setMetamaskState('Connected')}></MetaMaskButton> */}
-          {/* {(metamaskState == 'Connected') ?(
             <div>
               <AddNFTs />
               <CTabs />
             </div>
-
-          ) : <div></div>
-          } */}
         </div>)
         ;
   }
-
-const MetamaskConnectButton = () => {
-  return (
-    <div className="App">
-      <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
-    </div>
-  );
-};
 
 function AddNFTs(){
   let metaNet = GetMetaNet();

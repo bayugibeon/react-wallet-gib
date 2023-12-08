@@ -4,40 +4,34 @@ import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 import AccountClass from './../model/Account';
 import NetworkClass from './../model/NetworkClass';
+import detectEthereumProvider from '@metamask/detect-provider';
+import { _checkMetamask, _debug } from './../Functions';
+import {Body} from './../components/Layout';
 
 const MetamaskNetContext = createContext();
 const MainNetContext = createContext();
 const AccountContext = createContext();
 
-export function NetworkContextProvider({currentAccount, children}){
-  const mainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
-      process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
-  const account = new AccountClass(process.env.REACT_APP_ACCOUNT, "", process.env.REACT_APP_CONTRACT);
+export function NetworkContextProvider({account, children}){
+      const mainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
+        process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
+        const accountClass = new AccountClass(process.env.REACT_APP_ACCOUNT, account, process.env.REACT_APP_CONTRACT);
+        const metamaskNetwork = new NetworkClass(window.ethereum, account, AbiFile, process.env.REACT_APP_CONTRACT);
 
-  const metamaskNetwork = new NetworkClass(window.ethereum, null, AbiFile, process.env.REACT_APP_CONTRACT);
+      _debug("NetworkContextProvider",metamaskNetwork);
 
     return(
-        <MetaMaskUIProvider sdkOptions={{
-                dappMetadata: {
-                name: process.env.REACT_APP_METADATA_NAME,
-                }
-            }}>
             <MetamaskNetContext.Provider value={metamaskNetwork}>
                 <MainNetContext.Provider value={mainNetwork}>
-                    <AccountContext.Provider value={account}>
+                    <AccountContext.Provider value={accountClass}>
                         {children}
+                        <Body />
                     </AccountContext.Provider>
                 </MainNetContext.Provider>
             </MetamaskNetContext.Provider>     
-        </MetaMaskUIProvider>
+
     );
 }
-
-
-const MetamaskButtonContext = () => {
-
-}
-
 
 export function GetMetaNet() {
     const context = useContext(MetamaskNetContext);

@@ -2,6 +2,7 @@ import {GetMetaNet, GetMainNet, GetAccount} from './components/Context';
 
 export function _checkMetamask(provider) {
     var account = null;
+    _debug("provider", provider);
 
     if (typeof provider !== 'undefined') {
         //Metamask is installed
@@ -17,6 +18,7 @@ export function _checkMetamask(provider) {
           // console.log(err);
         });
       }     
+    _debug("account", account);
     return account;
 }
 
@@ -205,4 +207,23 @@ export function _watchAsset(_network, _account, _id){
 return Promise.resolve(requestId);
 }
 
+export function metamaskAccount(provider){
+  let currentAccount = null;
+  
+  provider.request({ method: 'eth_accounts' })
+    .then(handleAccountsChanged)
+    .catch((err) => {
+      console.error(err);
+    });
+
+  provider.on('accountsChanged', handleAccountsChanged);
+
+  function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+    } else if (accounts[0] !== currentAccount) {
+      currentAccount = accounts[0];
+    }
+  }
+  return currentAccount;;
+}
 

@@ -12,16 +12,21 @@ export let NFTBalance = [];
 export let NFTs = [];
 
 export function Body() {
-  const [getNFTState, setgetNFTState] = useState();
+  // const [metaNet, setMetaNet] = useState();
 
-  const metaNet = GetMetaNet();
   const mainNet = GetMainNet();
-  
-  // GetNFTs(metaNet.contract);
+  const metaNet = GetMetaNet();;
 
+
+  _debug("metaNet",metaNet);
+  if (typeof metaNet !== 'undefined' ) {
+    GetNFTs(metaNet.contract);
+  }
     return (
         <div>
-          <CTabBody />
+        {(metaNet !== null) ? <CTabBody /> : <></>
+
+        } 
         </div>)
         ;
   }

@@ -6,18 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap-utilities.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import '@mui/material';
 
-import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MetaMaskUIProvider sdkOptions={{
-      dappMetadata: {
-        name: "Demo UI React App",
-      }
-    }}>
+
       <App />
-    </MetaMaskUIProvider>
   </React.StrictMode>
 );
 

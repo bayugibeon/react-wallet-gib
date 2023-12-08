@@ -3,28 +3,88 @@ import {Body} from './components/Layout';
 import React, {useState, useEffect, createContext, useContext, useRef} from 'react';
 import AccountClass from './model/Account';
 import NetworkClass from './model/NetworkClass';
-import { _checkMetamask, _debug } from './Functions';
+import { _checkMetamask, _debug, metamaskAccount } from './Functions';
 import AbiFile from './erc1155-abi.json';
 import {NetworkContextProvider} from './components/Context';
 import {ConnectWalletButton} from './components/Wallets';
 import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
+import detectEthereumProvider from '@metamask/detect-provider';
+import Button from '@mui/material/Button';
+import { GetMetaNet } from './components/Context';
 
 const App = () => {
   // let MainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
   //     process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
   // let account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
+
   const [account, setAccount] = useState("");
   const currentAccount = { account, setAccount };
 
+  const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
+
+  const [contextReady, setContextReady] = useState();
+
+  let mainNetwork = null;
+  let accountClass = null;
+  let metamaskNetwork = null;
+
+  useEffect(() => {
+    try{ 
+      let detection = detectEthereumProvider();
+  
+      detection.then((result) => {
+          if (result !== null && window.ethereum.isMetaMask) {
+            setisMetamaskInstalled(true);
+
+            // _checkMetamask(window.ethereum).then((result) => {
+            //   setAccount(result);
+            // });
+
+            window.ethereum.request({ method: 'eth_accounts' })
+              .then(handleAccountsChanged)
+              .catch((err) => {
+                console.error(err);
+              });
+        
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
+        
+            function handleAccountsChanged(accounts) {
+              if (accounts.length === 0) {
+              } else if (accounts[0] !== account) {
+                setAccount(accounts[0]);
+              }
+            }
+          } else {
+          }    
+      });
+  
+    } catch(e) { 
+        console.error(e); 
+    }
+  
+  },[]);
+
   return (
-        <NetworkContextProvider currentAccount={currentAccount}>
+    <MetaMaskUIProvider sdkOptions={{
+      dappMetadata: {
+      name: process.env.REACT_APP_METADATA_NAME,
+      }
+  }}>
                 <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
-                {/* <Body /> */}
-        </NetworkContextProvider>
+                <h4>Current Account : {account}</h4>
+                {(account !== null && account !== "") ? 
+                <NetworkContextProvider account={account}>
+                  {/* <Body /> */}
+                  </NetworkContextProvider>  : <></>
+              }
+
+  </MetaMaskUIProvider>
+
 
     );
 };
+
 // function App() {
 //   const [initLoad, setInitLoad] = useState('Done');
 //   const [defaultState, setDefaultState] = useState('');
