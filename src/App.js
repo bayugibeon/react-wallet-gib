@@ -36,6 +36,22 @@ const App = () => {
       detection.then((result) => {
           if (result !== null && window.ethereum.isMetaMask) {
             setisMetamaskInstalled(true);
+
+            window.ethereum.request({ method: 'eth_accounts' })
+            .then(handleAccountsChanged)
+            .catch((err) => {
+              console.error(err);
+            });
+      
+          window.ethereum.on('accountsChanged', handleAccountsChanged);
+      
+          function handleAccountsChanged(accounts) {
+            if (accounts.length === 0) {
+            } else if (accounts[0] !== account) {
+              setAccount(accounts[0]);
+            }
+          }
+  
           }
       });
   
@@ -43,27 +59,13 @@ const App = () => {
         console.error(e); 
     }
   
-  },[]);
+  },[account]);
 
   const connect = () => {
         // _checkMetamask(window.ethereum).then((result) => {
         //   setAccount(result);
         // });
 
-        window.ethereum.request({ method: 'eth_accounts' })
-          .then(handleAccountsChanged)
-          .catch((err) => {
-            console.error(err);
-          });
-    
-        window.ethereum.on('accountsChanged', handleAccountsChanged);
-    
-        function handleAccountsChanged(accounts) {
-          if (accounts.length === 0) {
-          } else if (accounts[0] !== account) {
-            setAccount(accounts[0]);
-          }
-        }
 
   }
 
@@ -74,9 +76,9 @@ const App = () => {
       name: process.env.REACT_APP_METADATA_NAME,
       }
   }}>
-                {
-                  (isMetamaskInstalled === false) ? 
                   <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+                {
+                  (isMetamaskInstalled === false) ?  <></>
                   :
                   <Button variant="outlined" onClick={() => connect()}>Connect</Button>
 
