@@ -52,7 +52,7 @@ const App = () => {
             function handleAccountsChanged(accounts) {
               if (accounts.length === 0) {
               } else if (accounts[0] !== account) {
-                setAccount(accounts[0]);
+                // setAccount(accounts[0]);
               }
             }
           } else {
