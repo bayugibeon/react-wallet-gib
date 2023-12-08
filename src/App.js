@@ -20,7 +20,7 @@ const App = () => {
   // let account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
 
   const [curAccount, setcurAccount] = useState("");
-  const currentAccount = { account, setAccount };
+  const currentAccount = { curAccount, setcurAccount };
 
   const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
   const { sdk, connected, connecting, provider, chainId, account, balance } = useSDK();
@@ -31,57 +31,85 @@ const App = () => {
   let accountClass = null;
   let metamaskNetwork = null;
 
-  useEffect(() => {
-    try{ 
-      let detection = detectEthereumProvider();
+  // useEffect(() => {
+  //   try{ 
+  //     let detection = detectEthereumProvider();
   
-      detection.then((result) => {
-          if (result !== null && window.ethereum.isMetaMask) {
-            setisMetamaskInstalled(true);
+  //     detection.then((result) => {
+  //         if (result !== null && window.ethereum.isMetaMask) {
+  //           setisMetamaskInstalled(true);
 
-            window.ethereum.request({ method: 'eth_accounts' })
-            .then(handleAccountsChanged)
-            .catch((err) => {
-              console.error(err);
-            });
+  //           window.ethereum.request({ method: 'eth_accounts' })
+  //           .then(handleAccountsChanged)
+  //           .catch((err) => {
+  //             console.error(err);
+  //           });
       
-          window.ethereum.on('accountsChanged', handleAccountsChanged);
+  //         window.ethereum.on('accountsChanged', handleAccountsChanged);
       
-          function handleAccountsChanged(accounts) {
-            if (accounts.length === 0) {
-            } else if (accounts[0] !== account) {
-              setAccount(accounts[0]);
-            }
-          }
+  //         function handleAccountsChanged(accounts) {
+  //           if (accounts.length === 0) {
+  //           } else if (accounts[0] !== account) {
+  //             setAccount(accounts[0]);
+  //           }
+  //         }
   
-          }
-      });
+  //         }
+  //     });
   
-    } catch(e) { 
-        console.error(e); 
-    }
+  //   } catch(e) { 
+  //       console.error(e); 
+  //   }
   
-  },[account]);
+  // },[account]);
 
   const connect = async () => {
     try {
-      await sdk?.connect();
+      await sdk?.connect().then((result) => {
+        _debug("result",result);
+      });;
     } catch (err) {
       console.warn(`failed to connect..`, err);
     }
   };
 
+  const getAccount = () => {
+      window.ethereum.request({ method: 'eth_accounts' })
+      .then(handleAccountsChanged)
+      .catch((err) => {
+        console.error(err);
+      });
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+  
+      function handleAccountsChanged(accounts) {
+        if (accounts.length === 0) {
+        } else if (accounts[0] !== account) {
+          setcurAccount(accounts[0]);
+        }
+      }
+
+  };
+
   return (
     <>
-      <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
-        Connect
-      </button>
-      <p>Account : {account}</p>
-      <p>Chain : {chainId}</p>
+
+      <MetaMaskUIProvider sdkOptions={{
+      useDeeplink: true,
+      dappMetadata: {
+      name: process.env.REACT_APP_METADATA_NAME,
+      }}}>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
+                Connect
+              </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
+                Request Account
+              </button>
+              <p>Account : {account}</p>
+              <p>Chain : {chainId}</p>
+              <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
+              </MetaMaskUIProvider>
+              <p>Account : {curAccount}</p>
     </>
-
-
-
     );
 };
 
@@ -89,7 +117,6 @@ const App = () => {
 
   {/* 
                  
-                  <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
                 {
                   (isMetamaskInstalled === false) ?  <></>
                   :
@@ -99,12 +126,7 @@ const App = () => {
                 <h4>Current Account : {account}</h4> 
               }
   
-    <MetaMaskUIProvider sdkOptions={{
-      useDeeplink: true,
-      dappMetadata: {
-      name: process.env.REACT_APP_METADATA_NAME,
-      }
-  }}>
+                  
   
   (account !== null && account !== "") ? 
   <NetworkContextProvider account={account}>
