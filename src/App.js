@@ -125,7 +125,7 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
                 Connect w/ Sign
               </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount()}>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
               <p>Response : {response}</p>
