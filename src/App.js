@@ -86,6 +86,7 @@ const App = () => {
   };
 
   const getAccount = () => {
+    let reqAccount = "";
     window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((requestResult) => {
       _debug(requestResult);
@@ -99,10 +100,11 @@ const App = () => {
         function handleAccountsChanged(accounts) {
           if (accounts.length === 0) {
           } else if (accounts[0] !== curAccount) {
-            setcurAccount(accounts[0]);
+            reqAccount = accounts[0];
+            // setcurAccount(accounts[0]);
           }
         }
-
+        return reqAccount;
     })
     .catch((err) => {
       console.error(err);
@@ -125,7 +127,7 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
                 Connect w/ Sign
               </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={() => setcurAccount(getAccount)}>
                 Request Account
               </button>
               <p>Response : {response}</p>
