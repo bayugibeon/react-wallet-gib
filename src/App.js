@@ -86,7 +86,6 @@ const App = () => {
   };
 
   const getAccount = () => {
-    let curAccount = "";
     window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((requestResult) => {
       _debug(requestResult);
@@ -101,7 +100,6 @@ const App = () => {
           if (accounts.length === 0) {
           } else if (accounts[0] !== curAccount) {
             setcurAccount(accounts[0]);
-            curAccount = accounts[0];
           }
         }
 
