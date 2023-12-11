@@ -24,7 +24,7 @@ const App = () => {
 
   const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
   const { sdk, connected, connecting, provider, chainId, account, balance } = useSDK();
-
+  const [response, setResponse] = useState();
   const [contextReady, setContextReady] = useState();
 
   let mainNetwork = null;
@@ -62,31 +62,51 @@ const App = () => {
   //   }
   
   // },[account]);
-
-  const connect = async () => {
+  const connectAndSign = () => {
     try {
-      await sdk?.connect().then((result) => {
+      const signResult = sdk?.connectAndSign({
+        msg: 'Connect + Sign message'
+      });
+      setResponse(signResult);
+    } catch (err) {
+      console.warn(`failed to connect..`, err);
+    }
+  };
+
+  _debug(useSDK());
+  const connect = () => {
+    
+    try {
+      sdk.connect().then((result) => {
         _debug("result",result);
-      });;
+      });
     } catch (err) {
       console.warn(`failed to connect..`, err);
     }
   };
 
   const getAccount = () => {
-      window.ethereum.request({ method: 'eth_accounts' })
-      .then(handleAccountsChanged)
-      .catch((err) => {
-        console.error(err);
-      });
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-  
-      function handleAccountsChanged(accounts) {
-        if (accounts.length === 0) {
-        } else if (accounts[0] !== account) {
-          setcurAccount(accounts[0]);
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+    .then((requestResult) => {
+      _debug(requestResult);
+        window.ethereum.request({ method: 'eth_accounts' })
+        .then(handleAccountsChanged)
+        .catch((err) => {
+          console.error(err);
+        });
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+    
+        function handleAccountsChanged(accounts) {
+          if (accounts.length === 0) {
+          } else if (accounts[0] !== account) {
+            setcurAccount(accounts[0]);
+          }
         }
-      }
+
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
   };
 
@@ -94,21 +114,26 @@ const App = () => {
     <>
 
       <MetaMaskUIProvider sdkOptions={{
-      useDeeplink: true,
+      useDeeplink: false,
       dappMetadata: {
-      name: process.env.REACT_APP_METADATA_NAME,
+          name: process.env.REACT_APP_METADATA_NAME,
+          url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
                 Connect
               </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
+                Connect w/ Sign
+              </button>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
+              <p>Response : {response}</p>
               <p>Account : {account}</p>
               <p>Chain : {chainId}</p>
               <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
-              </MetaMaskUIProvider>
               <p>Account : {curAccount}</p>
+      </MetaMaskUIProvider>
     </>
     );
 };
