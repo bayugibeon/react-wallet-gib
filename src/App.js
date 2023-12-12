@@ -91,19 +91,22 @@ const App = () => {
     .then((requestResult) => {
       _debug(requestResult);
         window.ethereum.request({ method: 'eth_accounts' })
-        .then(handleAccountsChanged)
+        .then((result) => {
+          document.getElementById("account").value = result[0];
+        })
+        // .then(handleAccountsChanged)
         .catch((err) => {
           console.error(err);
         });
-        window.ethereum.on('accountsChanged', handleAccountsChanged);
+        // window.ethereum.on('accountsChanged', handleAccountsChanged);
     
-        function handleAccountsChanged(accounts) {
-          if (accounts.length === 0) {
-          } else if (accounts[0] !== curAccount) {
-            reqAccount = accounts[0];
-            // setcurAccount(accounts[0]);
-          }
-        }
+        // function handleAccountsChanged(accounts) {
+        //   if (accounts.length === 0) {
+        //   } else if (accounts[0] !== curAccount) {
+        //     reqAccount = accounts[0];
+        //     // setcurAccount(accounts[0]);
+        //   }
+        // }
         return reqAccount;
     })
     .catch((err) => {
@@ -127,11 +130,11 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
                 Connect w/ Sign
               </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={() => setcurAccount(getAccount)}>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
               <p>Response : {response}</p>
-              <p>Account : {account}</p>
+              <p id="account">Account : {account}</p>
               <p>Chain : {chainId}</p>
               <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
               <p>Account : {curAccount}</p>
