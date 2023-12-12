@@ -28,7 +28,7 @@ const App = () => {
   let accountClass = null;
   let metamaskNetwork = null;
 
-  window.ethereum.on('accountsChanged', handleAccountsChanged);
+  window.ethereum.addEventListener('accountsChanged', handleAccountsChanged);
        
   const handleAccountsChanged = (accounts) => {
     if (accounts.length === 0) {
