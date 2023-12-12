@@ -27,6 +27,17 @@ const App = () => {
   let mainNetwork = null;
   let accountClass = null;
   let metamaskNetwork = null;
+
+  window.ethereum.on('accountsChanged', handleAccountsChanged);
+       
+  const handleAccountsChanged = (accounts) => {
+    if (accounts.length === 0) {
+    } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
+     //  reqAccount = accounts[0];
+      setcurAccount(accounts[0]);
+    }
+  }
+
   const connectMetamask = () => {
     return window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((accounts) => {
@@ -61,17 +72,6 @@ const App = () => {
         //   }
        // }
 
-       window.ethereum.on('accountsChanged', handleAccountsChanged);
-       
-       function handleAccountsChanged(accounts) {
-         if (accounts.length === 0) {
-         } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
-          //  reqAccount = accounts[0];
-           setcurAccount(accounts[0]);
-         }
-       }
-      }
-
        const accountChange = () => {
            window.ethereum.on('accountsChanged', handleAccountsChanged);
        
@@ -93,7 +93,7 @@ const App = () => {
       //     window.open("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/" + link,"_self")
       //   },
       dappMetadata: {
-          name: process.env.REACT_APP_METADATA_NAME,
+          name: process.env.REACT_APP_METADATA_NAME
           // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
           // uri: "https://react-wallet-gib.vercel.app"
           // url: window.location.protocol + '//' + window.location.host,
