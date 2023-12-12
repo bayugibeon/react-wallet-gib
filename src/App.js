@@ -28,21 +28,24 @@ const App = () => {
   let accountClass = null;
   let metamaskNetwork = null;
 
-  window.ethereum.addEventListener('accountsChanged', handleAccountsChanged);
+  // window.ethereum.addEventListener('accountsChanged', handleAccountsChanged);
        
-  const handleAccountsChanged = (accounts) => {
-    if (accounts.length === 0) {
-    } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
-     //  reqAccount = accounts[0];
-      setcurAccount(accounts[0]);
-    }
-  }
+  // const handleAccountsChanged = (accounts) => {
+  //   if (accounts.length === 0) {
+  //   } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
+  //    //  reqAccount = accounts[0];
+  //     setcurAccount(accounts[0]);
+  //   }
+  // }
 
   const connectMetamask = () => {
     return window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((accounts) => {
+      if (curAccount !== accounts[0])
+      {
+        setcurAccount(accounts[0]);
+      }
       return true;
-      // setcurAccount(accounts[0]);
       // setinitConnect(true);
     })
     .catch((err) => {
@@ -53,7 +56,10 @@ const App = () => {
   const getAccount = () => {
        return window.ethereum.request({ method: 'eth_accounts' })
       .then((accounts) => {
-        // setcurAccount(accounts[0]);
+        if (curAccount !== accounts[0])
+        {
+          setcurAccount(accounts[0]);
+        }
         return accounts[0];
       })
       .catch((err) => {
@@ -73,15 +79,15 @@ const App = () => {
        // }
 
        const accountChange = () => {
-           window.ethereum.on('accountsChanged', handleAccountsChanged);
+          //  window.ethereum.on('accountsChanged', handleAccountsChanged);
        
-           function handleAccountsChanged(accounts) {
-             if (accounts.length === 0) {
-             } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
-              //  reqAccount = accounts[0];
-               setcurAccount(accounts[0]);
-             }
-           }
+          //  function handleAccountsChanged(accounts) {
+          //    if (accounts.length === 0) {
+          //    } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
+          //     //  reqAccount = accounts[0];
+          //      setcurAccount(accounts[0]);
+          //    }
+          //  }
           }
 
   return (
