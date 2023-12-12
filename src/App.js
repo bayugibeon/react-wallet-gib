@@ -122,12 +122,30 @@ const App = () => {
 
   return (
     <>
-
       <MetaMaskUIProvider sdkOptions={{
       useDeeplink: true,
+        openDeeplink: () => {
+          if (canOpenLink) {
+            Linking.openURL("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
+          }
+        },
       dappMetadata: {
           name: process.env.REACT_APP_METADATA_NAME,
-          uri: "https://react-wallet-gib.vercel.app/"
+          // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
+          // uri: "https://react-wallet-gib.vercel.app/"
+          // url: window.location.protocol + '//' + window.location.host,
+      }}}>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} >
+                deeplink
+              </button>
+
+      </MetaMaskUIProvider>
+      <MetaMaskUIProvider sdkOptions={{
+      useDeeplink: false,
+      dappMetadata: {
+          name: process.env.REACT_APP_METADATA_NAME,
+          // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
+          // uri: "https://react-wallet-gib.vercel.app/"
           // url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
