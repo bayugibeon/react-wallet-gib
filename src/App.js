@@ -125,9 +125,8 @@ const App = () => {
       <MetaMaskUIProvider sdkOptions={{
       useDeeplink: true,
         openDeeplink: () => {
-          if (canOpenLink) {
-            Linking.openURL("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
-          }
+          // window.location("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
+          window.open("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/","_self")
         },
       dappMetadata: {
           name: process.env.REACT_APP_METADATA_NAME,
