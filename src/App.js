@@ -59,7 +59,18 @@ const App = () => {
         //     reqAccount = accounts[0];
         //     // setcurAccount(accounts[0]);
         //   }
-        // }
+       // }
+  const accountChange = () => {
+           window.ethereum.on('accountsChanged', handleAccountsChanged);
+       
+           function handleAccountsChanged(accounts) {
+             if (accounts.length === 0) {
+             } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
+              //  reqAccount = accounts[0];
+               setcurAccount(accounts[0]);
+             }
+           }
+          }
 
   return (
     <>
@@ -68,8 +79,8 @@ const App = () => {
       dappMetadata: {
           name: process.env.REACT_APP_METADATA_NAME,
           // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
-          // uri: "https://react-wallet-gib.vercel.app/"
-          url: window.location.protocol + '//' + window.location.host,
+          uri: "https://react-wallet-gib.vercel.app"
+          // url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectMetamask}>
                 Connect Metamask
@@ -84,6 +95,9 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} 
                 onClick={() => setcurAccount(getAccount())}>
                 Request Account
+              </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={accountChange}>
+                Account Change
               </button>
               <p>initConnect : {initConnect.toString()}</p>
               <p>Account : {curAccount}</p>
