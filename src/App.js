@@ -141,7 +141,7 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
-              <p>initConnect : {initConnect}</p>
+              <p>initConnect : {initConnect.toString()}</p>
               <p>Response : {response}</p>
               <p>Account : {account}</p>
               <p>Chain : {chainId}</p>
