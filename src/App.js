@@ -86,18 +86,22 @@ const App = () => {
   };
 
   const getAccount = () => {
-    let reqAccount = "";
     window.ethereum.request({ method: 'eth_requestAccounts' })
-    .then((requestResult) => {
-      _debug(requestResult);
-        window.ethereum.request({ method: 'eth_accounts' })
-        .then((result) => {
-          document.getElementById("account").value = result[0];
-        })
-        // .then(handleAccountsChanged)
-        .catch((err) => {
-          console.error(err);
-        });
+    .then((acounts) => {
+      setcurAccount(accounts[0]);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+      // window.ethereum.request({ method: 'eth_accounts' })
+      // .then((acounts) => {
+      //   _debug(requestResult);
+      //   setcurAccount(accounts[0]);
+      // })
+      // .catch((err) => {
+      //   console.error(err);
+      // });
+            // .then(handleAccountsChanged)
         // window.ethereum.on('accountsChanged', handleAccountsChanged);
     
         // function handleAccountsChanged(accounts) {
@@ -107,11 +111,6 @@ const App = () => {
         //     // setcurAccount(accounts[0]);
         //   }
         // }
-        return reqAccount;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
 
   };
 
@@ -134,7 +133,7 @@ const App = () => {
                 Request Account
               </button>
               <p>Response : {response}</p>
-              <p id="account">Account : {account}</p>
+              <p>Account : {account}</p>
               <p>Chain : {chainId}</p>
               <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
               <p>Account : {curAccount}</p>
