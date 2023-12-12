@@ -124,10 +124,10 @@ const App = () => {
     <>
 
       <MetaMaskUIProvider sdkOptions={{
-      useDeeplink: false,
+      useDeeplink: true,
       dappMetadata: {
-          name: process.env.REACT_APP_METADATA_NAME,
-          url: window.location.protocol + '//' + window.location.host,
+          name: process.env.REACT_APP_METADATA_NAME
+          // url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
                 Connect
