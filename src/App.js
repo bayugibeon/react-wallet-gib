@@ -126,7 +126,8 @@ const App = () => {
       <MetaMaskUIProvider sdkOptions={{
       useDeeplink: true,
       dappMetadata: {
-          name: process.env.REACT_APP_METADATA_NAME
+          name: process.env.REACT_APP_METADATA_NAME,
+          uri: "https://react-wallet-gib.vercel.app/"
           // url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
