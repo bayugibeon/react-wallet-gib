@@ -10,7 +10,6 @@ import {ConnectWalletButton} from './components/Wallets';
 import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { useSDK } from '@metamask/sdk-react';
 import Button from '@mui/material/Button';
 import { GetMetaNet } from './components/Context';
 
@@ -24,73 +23,16 @@ const App = () => {
   const currentAccount = { curAccount, setcurAccount };
 
   const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
-  const { sdk, connected, connecting, provider, chainId, account, balance } = useSDK();
-  const [response, setResponse] = useState();
-  const [contextReady, setContextReady] = useState();
 
   let mainNetwork = null;
   let accountClass = null;
   let metamaskNetwork = null;
-
-  // useEffect(() => {
-  //   try{ 
-  //     let detection = detectEthereumProvider();
-  
-  //     detection.then((result) => {
-  //         if (result !== null && window.ethereum.isMetaMask) {
-  //           setisMetamaskInstalled(true);
-
-  //           window.ethereum.request({ method: 'eth_accounts' })
-  //           .then(handleAccountsChanged)
-  //           .catch((err) => {
-  //             console.error(err);
-  //           });
-      
-  //         window.ethereum.on('accountsChanged', handleAccountsChanged);
-      
-  //         function handleAccountsChanged(accounts) {
-  //           if (accounts.length === 0) {
-  //           } else if (accounts[0] !== account) {
-  //             setAccount(accounts[0]);
-  //           }
-  //         }
-  
-  //         }
-  //     });
-  
-  //   } catch(e) { 
-  //       console.error(e); 
-  //   }
-  
-  // },[account]);
-  const connectAndSign = () => {
-    try {
-      const signResult = sdk?.connectAndSign({
-        msg: 'Connect + Sign message'
-      });
-      setResponse(signResult);
-    } catch (err) {
-      console.warn(`failed to connect..`, err);
-    }
-  };
-
-  _debug(useSDK());
-  const connect = () => {
-    
-    try {
-      sdk.connect().then((result) => {
-        _debug("result",result);
-      });
-    } catch (err) {
-      console.warn(`failed to connect..`, err);
-    }
-  };
-
   const connectMetamask = () => {
-    window.ethereum.request({ method: 'eth_requestAccounts' })
+    return window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((accounts) => {
+      return true;
       // setcurAccount(accounts[0]);
-      setinitConnect(true);
+      // setinitConnect(true);
     })
     .catch((err) => {
       console.error(err);
@@ -98,13 +40,15 @@ const App = () => {
   };
 
   const getAccount = () => {
-       window.ethereum.request({ method: 'eth_accounts' })
+       return window.ethereum.request({ method: 'eth_accounts' })
       .then((accounts) => {
-        setcurAccount(accounts[0]);
+        // setcurAccount(accounts[0]);
+        return accounts[0];
       })
       .catch((err) => {
         console.error(err);
       });
+    };
 
             // .then(handleAccountsChanged)
         // window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -117,41 +61,33 @@ const App = () => {
         //   }
         // }
 
-
-  }
-
   return (
     <>
       <MetaMaskUIProvider sdkOptions={{
-      useDeeplink: true,
-      openDeeplink: () => {
-          // window.location("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
-          window.open("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/","_self")
-        },
+      useDeeplink: false,
       dappMetadata: {
           name: process.env.REACT_APP_METADATA_NAME,
           // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
           // uri: "https://react-wallet-gib.vercel.app/"
-          // url: window.location.protocol + '//' + window.location.host,
+          url: window.location.protocol + '//' + window.location.host,
       }}}>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connect}>
-                Connect
-              </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
-                Connect w/ Sign
-              </button>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectMetamask}>
                 Connect Metamask
               </button>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} 
+                onClick={() => setinitConnect(connectMetamask())}>
+                Connect Metamask
+              </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} 
+                onClick={() => setcurAccount(getAccount())}>
+                Request Account
+              </button>
               <p>initConnect : {initConnect.toString()}</p>
-              <p>Response : {response}</p>
-              <p>Account : {account}</p>
-              <p>Chain : {chainId}</p>
-              <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
               <p>Account : {curAccount}</p>
+              <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
       </MetaMaskUIProvider>
     </>
     );
