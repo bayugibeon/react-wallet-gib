@@ -20,6 +20,7 @@ const App = () => {
   // let account = new AccountClass(process.env.REACT_APP_ACCOUNT, defaultState, process.env.REACT_APP_CONTRACT);
 
   const [curAccount, setcurAccount] = useState("");
+  const [initConnect, setinitConnect] = useState(false);
   const currentAccount = { curAccount, setcurAccount };
 
   const [isMetamaskInstalled, setisMetamaskInstalled] = useState(false);
@@ -85,22 +86,26 @@ const App = () => {
     }
   };
 
-  const getAccount = () => {
+  const connectMetamask = () => {
     window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((accounts) => {
-      setcurAccount(accounts[0]);
+      // setcurAccount(accounts[0]);
+      setinitConnect(true);
     })
     .catch((err) => {
       console.error(err);
     });
-      // window.ethereum.request({ method: 'eth_accounts' })
-      // .then((acounts) => {
-      //   _debug(requestResult);
-      //   setcurAccount(accounts[0]);
-      // })
-      // .catch((err) => {
-      //   console.error(err);
-      // });
+  };
+
+  const getAccount = () => {
+       window.ethereum.request({ method: 'eth_accounts' })
+      .then((acounts) => {
+        setcurAccount(accounts[0]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
             // .then(handleAccountsChanged)
         // window.ethereum.on('accountsChanged', handleAccountsChanged);
     
@@ -112,7 +117,8 @@ const App = () => {
         //   }
         // }
 
-  };
+
+  }
 
   return (
     <>
@@ -129,9 +135,13 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectAndSign}>
                 Connect w/ Sign
               </button>
+              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectMetamask}>
+                Connect Metamask
+              </button>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
+              <p>initConnect : {initConnect}</p>
               <p>Response : {response}</p>
               <p>Account : {account}</p>
               <p>Chain : {chainId}</p>
