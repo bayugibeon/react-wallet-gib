@@ -99,7 +99,7 @@ const App = () => {
 
   const getAccount = () => {
        window.ethereum.request({ method: 'eth_accounts' })
-      .then((acounts) => {
+      .then((accounts) => {
         setcurAccount(accounts[0]);
       })
       .catch((err) => {
