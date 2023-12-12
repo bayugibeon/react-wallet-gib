@@ -60,7 +60,19 @@ const App = () => {
         //     // setcurAccount(accounts[0]);
         //   }
        // }
-  const accountChange = () => {
+
+       window.ethereum.on('accountsChanged', handleAccountsChanged);
+       
+       function handleAccountsChanged(accounts) {
+         if (accounts.length === 0) {
+         } else if (accounts[0] !== curAccount && curAccount !== null && curAccount !== "" ) {
+          //  reqAccount = accounts[0];
+           setcurAccount(accounts[0]);
+         }
+       }
+      }
+
+       const accountChange = () => {
            window.ethereum.on('accountsChanged', handleAccountsChanged);
        
            function handleAccountsChanged(accounts) {
@@ -76,14 +88,14 @@ const App = () => {
     <>
       <MetaMaskUIProvider sdkOptions={{
       useDeeplink: false,
-      openDeeplink: (link) => {
-          // window.location("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
-          window.open("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/" + link,"_self")
-        },
+      // openDeeplink: (link) => {
+      //     // window.location("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
+      //     window.open("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/" + link,"_self")
+      //   },
       dappMetadata: {
           name: process.env.REACT_APP_METADATA_NAME,
           // "https://metamask.app.link/dapp/react-wallet-gib.vercel.app/"
-          uri: "https://react-wallet-gib.vercel.app"
+          // uri: "https://react-wallet-gib.vercel.app"
           // url: window.location.protocol + '//' + window.location.host,
       }}}>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={connectMetamask}>
