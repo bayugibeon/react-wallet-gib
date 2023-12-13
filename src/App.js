@@ -6,7 +6,7 @@ import NetworkClass from './model/NetworkClass';
 import { _checkMetamask, _debug, metamaskAccount } from './Functions';
 import AbiFile from './erc1155-abi.json';
 import {NetworkContextProvider} from './components/Context';
-import {ConnectWalletButton} from './components/Wallets';
+import {web3wallet} from './components/Wallets';
 import { MetaMaskButton } from '@metamask/sdk-react-ui';
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 import detectEthereumProvider from '@metamask/detect-provider';
@@ -92,6 +92,7 @@ const App = () => {
 
   return (
     <>
+      <web3wallet />
       <MetaMaskUIProvider sdkOptions={{
       useDeeplink: false,
       // openDeeplink: (link) => {
