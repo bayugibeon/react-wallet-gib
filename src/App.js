@@ -6,8 +6,9 @@ import NetworkClass from './model/NetworkClass';
 import { _checkMetamask, _debug, metamaskAccount } from './Functions';
 import AbiFile from './erc1155-abi.json';
 import {NetworkContextProvider} from './components/Context';
-import {web3wallet} from './components/Wallets';
-import { MetaMaskButton } from '@metamask/sdk-react-ui';
+import {WalletConnector, ConnectModal} from './components/Wallets';
+import { MetaMaskButton , useSDK} from '@metamask/sdk-react-ui';
+// import { useSDK, MetaMaskProvider } from "@metamask/sdk-react";
 import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Button from '@mui/material/Button';
@@ -92,8 +93,18 @@ const App = () => {
 
   return (
     <>
-      <web3wallet />
+      <h1>WalletConnector</h1>
+      <WalletConnector />
+      <h1>ConnectModal</h1>
+      <ConnectModal /> 
+
+      <h1>ConnectWalletButton</h1>
+      <ConnectWalletButton />
+      <h1>Metamask SDK</h1>
+      <MetamaskSDK />
+
       <MetaMaskUIProvider sdkOptions={{
+      // <MetaMaskProvider sdkOptions={{
       useDeeplink: false,
       // openDeeplink: (link) => {
       //     // window.location("https://metamask.app.link/dapp/react-wallet-gib.vercel.app/");
@@ -126,10 +137,76 @@ const App = () => {
               <p>Account : {curAccount}</p>
               <MetaMaskButton theme={'light'} color="white"></MetaMaskButton>
       </MetaMaskUIProvider>
+      {/* </MetaMaskProvider> */}
     </>
     );
 };
 
+function MetamaskSDK() {
+  const [account, setAccount] = useState();
+  const { sdk, connected, connecting, provider, chainId } = useSDK();
+
+  const connect = async () => {
+    try {
+      const accounts = await sdk?.connect();
+      setAccount(accounts?.[0]);
+    } catch(err) {
+      console.warn(`failed to connect..`, err);
+    }
+  };
+
+  return (
+    <div className="App">
+      <button style={{ padding: 10, margin: 10 }} onClick={connect}>
+        Connect
+      </button>
+      {connected && (
+        <div>
+          <>
+            {chainId && `Connected chain: ${chainId}`}
+            <p></p>
+            {account && `Connected account: ${account}`}
+          </>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ConnectWalletButton = () => {
+  const { sdk, connected, connecting, account } = useSDK();
+
+  const connect = async () => {
+    try {
+      await sdk?.connect();
+    } catch (err) {
+      console.warn(`No accounts found`, err);
+    }
+  };
+
+  const disconnect = () => {
+    if (sdk) {
+      sdk.terminate();
+    }
+  };
+
+  return (
+    <div className="relative">
+      {connected ? (
+            <button
+              onClick={disconnect}
+              className="block w-full pl-2 pr-4 py-2 text-left text-[#F05252] hover:bg-gray-200"
+            >
+              Disconnect
+            </button>
+      ) : (
+        <Button disabled={connecting} onClick={connect}>
+           Connect Wallet
+        </Button>
+      )}
+    </div>
+  );
+};
 
 
   {/* 
