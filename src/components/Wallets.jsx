@@ -3,6 +3,8 @@ import { Core } from '@walletconnect/core';
 import { Web3Wallet } from '@walletconnect/web3wallet';
 import Button from '@mui/material/Button';
 import { useWeb3Modal, createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
+import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
+import { BrowserProvider, Contract, formatUnits } from 'ethers'
 
 const projectId = process.env.REACT_APP_WALLET;
 const core = new Core({
@@ -47,12 +49,24 @@ createWeb3Modal({
 
   
 export  function ConnectModal() {
-  const { open } = useWeb3Modal()
+  const { open } = useWeb3Modal();
 
+  const { address, chainId, isConnected } = useWeb3ModalAccount()
+  const { walletProvider } = useWeb3ModalProvider()
+
+  const ethersProvider =  new BrowserProvider(walletProvider);
+
+
+  
   return (
     <>
       <button onClick={() => open()}>Open Connect Modal</button>
       <button onClick={() => open({ view: 'Networks' })}>Open Network Modal</button>
+      {(!isConnected) ? <></> : <>
+        <p>Address : {address}</p>
+      </>
+      }
+      
     </>
   )
   }

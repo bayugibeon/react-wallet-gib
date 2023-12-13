@@ -122,14 +122,6 @@ const App = () => {
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={getAccount}>
                 Request Account
               </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} 
-                onClick={() => setinitConnect(connectMetamask())}>
-                Connect Metamask
-              </button>
-              <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} 
-                onClick={() => setcurAccount(getAccount())}>
-                Request Account
-              </button>
               <button className={'Button-Normal'} style={{ padding: 10, margin: 10 }} onClick={accountChange}>
                 Account Change
               </button>
