@@ -2,12 +2,10 @@ import {GetMetaNet, GetMainNet, GetAccount} from './components/Context';
 
 export function _checkMetamask(provider) {
     var account = null;
-    _debug("provider", provider);
 
     if (typeof provider !== 'undefined') {
         //Metamask is installed
-        account = provider
-        .request({method: 'eth_requestAccounts' })
+        account = provider.send("eth_requestAccounts",[])
         .then((accounts) => {
           // console.log('###--- ACCOUNTS ----###');
           // console.log(accounts);
@@ -18,7 +16,6 @@ export function _checkMetamask(provider) {
           // console.log(err);
         });
       }     
-    _debug("account", account);
     return account;
 }
 

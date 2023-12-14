@@ -2,11 +2,11 @@ import React from 'react';
 import { Core } from '@walletconnect/core';
 import { Web3Wallet } from '@walletconnect/web3wallet';
 import Button from '@mui/material/Button';
-import { useWeb3Modal, createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
-import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
+import { useWeb3Modal, createWeb3Modal, defaultConfig, 
+  useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
 import { BrowserProvider, Contract, formatUnits } from 'ethers'
 
-const projectId = process.env.REACT_APP_WALLET;
+export const projectId = process.env.REACT_APP_WALLET;
 const core = new Core({
   projectId: process.env.REACT_APP_WALLET
 });
@@ -27,7 +27,7 @@ export function WalletConnector() {
             <Button >Connect</Button>
     );
 }
-const mainnet = {
+export const mainnet = {
   chainId: 80001,
   name: 'Mumbai',
   currency: 'MATIC',
@@ -35,7 +35,7 @@ const mainnet = {
   rpcUrl: 'https://polygon-mumbai-pokt.nodies.app'
 }
   
-const metadata = {
+export const metadata = {
     name: 'My Website',
     description: 'My Website description',
     url: 'https://react-wallet-gib.vercel.app/'
@@ -47,16 +47,12 @@ createWeb3Modal({
     projectId
   });
 
-  
-export  function ConnectModal() {
+export function ConnectModal() {
   const { open } = useWeb3Modal();
-
   const { address, chainId, isConnected } = useWeb3ModalAccount()
   const { walletProvider } = useWeb3ModalProvider()
-
+  
   const ethersProvider =  new BrowserProvider(walletProvider);
-
-
   
   return (
     <>
@@ -68,16 +64,5 @@ export  function ConnectModal() {
       }
       
     </>
-  )
-  }
-
-//  export function ConnectModal() {
-
-//     const { open, close } = useWeb3Modal();
-    
-//     const connect = open({ view: 'Connect' });
-    
-//     return (
-//         <Button onClick={connect}>Connect modal</Button>
-// );
-// }
+  );
+}

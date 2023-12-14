@@ -1,8 +1,8 @@
 import React, { useEffect, useState }  from 'react';
 import {GetMetaNet, GetMainNet, GetAccount} from './Context';
 import NFT from '../model/NFTData';
-import {_promiseArrayResolver, _debug, _checkApproval, _setApproval,
-  _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions';
+import {_checkMetamask, _promiseArrayResolver, _debug, _checkApproval, _setApproval,
+  _transferTokenRequest, _getTransactionReceipt, _watchAsset, _getAccountMetamask} from '../Functions-ether';
 import {Supplier} from './Supplier';
 // import {Collections} from './Users';
 // import {Wallets} from './Wallets';
@@ -13,33 +13,53 @@ export let NFTs = [];
 
 export function Body() {
   // const [metaNet, setMetaNet] = useState();
+  const [getNFTState, setgetNFTState] = useState(null);
 
   const mainNet = GetMainNet();
   const metaNet = GetMetaNet();;
+  const account = GetAccount();
 
 
-  _debug("metaNet",metaNet);
-  if (typeof metaNet !== 'undefined' ) {
-    GetNFTs(metaNet.contract);
+  useEffect(() => {
+    const getData = async () => {
+      let checkRequest = _checkMetamask(metaNet.provider);
+      const nftInfo = await checkRequest.then((result) => {
+        return getNFTs(mainNet.contract, account);
+        // return getNFTsEther(metaNet.contract, account);
+      });
+      setgetNFTState(nftInfo);
+      }
+    getData();
+
+    // Promise.all(nftInfo.pNFTSupplier).then((result) => {
+    //   _debug("nftInfo Promise result",result);
+    //   // 
+    // });  
+  
+  },getNFTState)
+
+  if (getNFTState != null) {   
+    NFTSupplier = getNFTState[0];
+    NFTs = getNFTState[1];
+    NFTBalance = getNFTState[2];
   }
-    return (
+return (
         <div>
-        {(metaNet !== null) ? <CTabBody /> : <></>
+        {
+          (getNFTState !== null) ? 
+          <CTabBody /> 
+          :  <></>
 
         } 
-        </div>)
-        ;
+        </div>
+        );
   }
 
   
-function GetNFTs(contract){
-  const [getNFTState, setgetNFTState] = useState();
-
+function getNFTs(contract, account){
   let promiseNFT = [];
   let promiseSupply = [];
   let promiseBalance = [];
-
-  let account = GetAccount();
 
   for (var i = 0; i < 3; i++){
 
@@ -76,27 +96,64 @@ function GetNFTs(contract){
     promiseNFT.push(nftdata);
   }
 
-
-  useEffect(() => {
-    
-    NFTSupplier = _promiseArrayResolver(promiseSupply);
-    NFTs = _promiseArrayResolver(promiseNFT);
-    NFTBalance = _promiseArrayResolver(promiseBalance);
-
-    Promise.all([NFTSupplier,NFTs,NFTBalance]).then((result) => {
-      setgetNFTState(result);
-    });
-
-  }, []);
-
-  if (getNFTState != null) {   
-    NFTSupplier = getNFTState[0];
-    NFTs = getNFTState[1];
-    NFTBalance = getNFTState[2];
-  }
-  
+      return Promise.all([_promiseArrayResolver(promiseSupply), _promiseArrayResolver(promiseNFT), _promiseArrayResolver(promiseBalance)])
+      .then((result) => {
+          return result;
+      });  
 }
 
+
+function getNFTsEther(contract, account){
+  let promiseNFT = [];
+  let promiseSupply = [];
+  let promiseBalance = [];
+
+  _debug("contract",contract);
+  _debug("account",account);
+
+  for (var i = 0; i < 3; i++){
+
+    let nftSupply = contract.balanceOf(account.deployer, i+1)
+      .then( (result) =>{
+        return result;
+      });
+
+      promiseSupply.push(nftSupply);
+
+      let nftBalance = contract.balanceOf(account.current, i+1)
+      .then( (result) =>{
+        return result;
+      });
+
+      promiseBalance.push(nftBalance);
+
+      let nftdata = contract.uri(i+1)
+      .then((value) => {
+        const fetchJson =
+        fetch(value)
+        .then(response => {
+          return response.json();
+        }).then(data => {
+          return data;
+        }).catch((e) => {
+          console.log('###--- ERROR ----###');
+          console.log(e.message);
+        });
+
+        return fetchJson;
+        });
+    
+    promiseNFT.push(nftdata);
+  }
+
+    return Promise.all(promiseSupply, promiseNFT, promiseBalance)
+      .then((result) => {
+          return result;
+      });  
+      // pNFTSupplier : _promiseArrayResolver(promiseSupply),
+      // pNFTs : _promiseArrayResolver(promiseNFT),
+      // pNFTBalance :  _promiseArrayResolver(promiseBalance)
+}
 
 function CTabBody(){
 
