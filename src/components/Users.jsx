@@ -81,8 +81,6 @@ function getNFTs(contract, accountAddress){
     promiseNFT.push(nftdata);
   }
 
-
-    
     NFTs = _promiseArrayResolver(promiseNFT);
     NFTBalance = _promiseArrayResolver(promiseBalance);
 

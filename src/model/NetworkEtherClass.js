@@ -1,5 +1,6 @@
 import {BrowserProvider, Contract} from 'ethers';
 import {ethers} from 'ethers';
+import { _debug } from '../Functions';
 
 class NetworkEtherClass {
     provider = null;
@@ -12,15 +13,18 @@ class NetworkEtherClass {
     constructor(_provider, _address, _abi, _contract, _web3 = null, _privatekey = null) {
         
         this.provider =  new BrowserProvider(_provider);
-        this.signer = this.provider.getSigner()
+        this.provider.getSigner().then((result) => {
+            this.signer = result;
+            this.address = _address;
+
+            this.abi = _abi;
+    
+            this.contract = new Contract(_contract, this.abi, this.provider);
+            this.contractTx = new Contract(_contract, this.abi, this.signer);
+        });
         // this.provider = new ethers.providers.Web3Provider(_provider);
         // this.web3 = new Web3(this.provider);
 
-        this.address = _address;
-
-        this.abi = _abi;
-        this.contract = new Contract(_contract, this.abi, this.provider);
-        this.contractTx = new Contract(_contract, this.abi, this.signer);
 
         // this.contract.defaultAccount = this.address;
         // this.contract.defaultBlock = "latest";

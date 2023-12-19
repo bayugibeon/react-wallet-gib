@@ -2,9 +2,10 @@ import React, { useEffect, useState }  from 'react';
 import { MetaMaskButton, MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 import {GetMetaNet, GetMainNet, GetAccount} from './Context';
 import NFT from '../model/NFTData';
-import {_promiseArrayResolver, _debug, _checkApproval, _setApproval,
-  _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions';
+import {_promiseArrayResolver, _debug, _checkApproval, _setApproval, _setApprovalWeb3,
+  _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions-ether';
 import {NFTSupplier, NFTBalance, NFTs} from './Layout';
+import NetworkEtherClass from './../model/NetworkEtherClass';
 
 export function Supplier() {
 
@@ -110,7 +111,7 @@ function CardColumns({title}) {
         if (numberAmount > 0)
         {
             stacks.push(
-            <div className="col col-2" id={"card-content-" +{i}}>
+            <div className="col col-4" id={"card-content-" +i.toString()}>
                 <CardContent index={i} title={title} amount={numberAmount}/>
             </div>
             );
@@ -145,13 +146,20 @@ function CardContent({index, title, amount}){
     fromAccount = account.current;
   }
 
-  contract.defaultAccount = account.deployer;
-  contract.defaultBlock = "latest";
-  const caller = contract.defaultAccount;
+  // var etherContract = new NetworkEtherClass(mainNet.provider, mainNet.address, mainNet.abi, null, mainNet.privateKey);
+
+  // mainContract.defaultAccount = account.deployer;
+  // mainContract.defaultBlock = "latest";
+
+  // metaNet.defaultAccount = account.current;
+  // metaNet.defaultBlock = "latest";
 
   const transferTokenAndReceipt = () => {
     setTransferState("Send Request...");
-    _transferTokenRequest(metaNet, id, fromAccount, toAccount, account.contract, account.current).then((requestResult) => {
+    _transferTokenRequest(mainNet, metaNet, id, fromAccount, toAccount, account.contract, account.current).then((requestResult) => {
+
+              _debug("requestResult",requestResult);
+              return;
 
               if (requestResult === null || requestResult === "")
               {
@@ -189,9 +197,12 @@ function CardContent({index, title, amount}){
     setTransferState("Checking Approval...");
 
     _checkApproval(account.deployer, account.current, mainContract).then((isApproved) => {
+      _debug("isApproved",isApproved);
       if (!isApproved){
         setTransferState("Ask Approval...");
-        _setApproval(account.deployer, account.current, mainContract).then((approvalResult) => {
+        // _setApproval(mainNet, metaNet, id, account.deployer, account.current, account.contract, account.current).then((approvalResult) => {
+          _setApprovalWeb3(account.deployer, account.current, mainNet).then((approvalResult) => {
+          return;
           transferTokenAndReceipt();							
         });
       }

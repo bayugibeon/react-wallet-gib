@@ -75,13 +75,18 @@ export function _debug(_name,_value){
 }
 
 
-export function _setApproval(fromAccount, toAccount, contract){
-  return contract.methods.setApprovalForAll(toAccount, true).estimateGas()
-            .then( (gasResult) =>{
 
-              contract.methods.setApprovalForAll(toAccount, true).send({
-                from : fromAccount,
-                gas : gasResult
+export function _setApprovalWeb3(fromAccount, toAccount, network){
+  var contract = network.contract;
+
+  contract.defaultAccount = fromAccount;
+  contract.defaultBlock = "latest";
+
+  _debug("fromAccount",fromAccount);
+  _debug("toAccount",toAccount);
+
+  return contract.methods.setApprovalForAll(toAccount.toString(), true).send({
+                from : fromAccount.toString()
               })
               .on('transactionHash', function(hash){
                 })
@@ -92,20 +97,28 @@ export function _setApproval(fromAccount, toAccount, contract){
                 })
               .then( (result) =>{
               });
-            });
+  // return contract.methods.setApprovalForAll(toAccount.toString(), true).estimateGas()
+  //           .then( (gasResult) =>{
+
+  //             contract.methods.setApprovalForAll(toAccount.toString(), true).send({
+  //               from : fromAccount.toString(),
+  //               gas : gasResult
+  //             })
+  //             .on('transactionHash', function(hash){
+  //               })
+  //               .on('confirmation', function(confirmationNumber, receipt){
+  //               })
+  //               .on('receipt', function(receipt){
+  //                 return receipt.status;
+  //               })
+  //             .then( (result) =>{
+  //             });
+  //           });
 }
 
-export function _checkApproval(fromaccount, toAccount, contract){
-  return contract.methods.isApprovedForAll(fromaccount, toAccount).call()
-            .then( (result) =>{
-              return result;
-            });
-
-}
-
-export function _transferTokenRequest(_network, _id, fromAccount, toAccount, contractAddress, currentAccount) {
-  let provider = _network.provider;
-  const web3 = _network.web3;
+export function _setApproval(_mainNetwork, _metaNetwork, _id, fromAccount, toAccount, contractAddress, currentAccount){
+  let provider = _metaNetwork.provider;
+  const web3 = _mainNetwork.web3;
 
   fromAccount = fromAccount.toString();
   toAccount = toAccount.toString();
@@ -117,7 +130,77 @@ export function _transferTokenRequest(_network, _id, fromAccount, toAccount, con
   // _debug("_id",_id);
 
   // let fromAccountEn = _encodeParameter("address",fromAccount);
+  var encodedData = web3.eth.abi.encodeFunctionCall({
+      name: "setApprovalForAll",
+      type: "function",
+      inputs: [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ]
+    }, [toAccount.toString(), true]);
 
+    // _debug("encodedData",encodedData);
+
+
+
+
+    // _debug("transactionParameters",transactionParameters);
+    const txHash = _getGasEstimation(provider, toAccount.toString(), encodedData).then((gasResult) => {
+
+
+      const transactionParameters = [{
+        to: contractAddress.toString(),
+        from: currentAccount.toString(),
+        gas: Number(gasResult).toString(),
+        data: encodedData.toString()
+      }];
+      // _debug("transactionParameters",transactionParameters);
+      return provider.send("eth_sendTransaction",transactionParameters)
+      .then((result) => {
+        return result;
+      }).catch(function (e) {
+        console.log('###--- eth_sendTransaction / error ----###');
+        console.log(e);
+      });
+    });
+    
+    var txHashPromise = Promise.resolve(txHash);
+    
+    return txHashPromise.then((hashResult)=>{
+        return hashResult;
+    }); 
+}
+
+export function _checkApproval(fromaccount, toAccount, contract){
+  return contract.methods.isApprovedForAll(fromaccount.toString(), toAccount.toString()).call()
+            .then( (result) =>{
+              return result;
+            });
+
+}
+
+export function _transferTokenRequest(_mainNetwork, _metaNetwork, _id, fromAccount, toAccount, contractAddress, currentAccount) {
+  let provider = _metaNetwork.provider;
+  const web3 = _mainNetwork.web3;
+
+  fromAccount = fromAccount.toString();
+  toAccount = toAccount.toString();
+  currentAccount = currentAccount.toString();
+ 
+  // _debug("fromAccount",fromAccount);
+  // _debug("toAccount",toAccount);
+  // _debug("currentAccount",currentAccount);
+  // _debug("_id",_id);
+
+  // let fromAccountEn = _encodeParameter("address",fromAccount);
   var encodedData = web3.eth.abi.encodeFunctionCall({
       name: "safeTransferFrom",
       type: "function",
@@ -152,24 +235,29 @@ export function _transferTokenRequest(_network, _id, fromAccount, toAccount, con
 
     // _debug("encodedData",encodedData);
 
-    const transactionParameters = {
-        to: contractAddress.toString(),
-        from: currentAccount.toString(),
-        data: encodedData
-    };
+
+
 
     // _debug("transactionParameters",transactionParameters);
+    const txHash = _getGasEstimation(provider, toAccount.toString(), encodedData).then((gasResult) => {
 
-    const txHash = provider.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters],
-      }).then((result) => {
+
+      const transactionParameters = [{
+        to: contractAddress.toString(),
+        from: currentAccount.toString(),
+        gas: Number(gasResult).toString(),
+        data: encodedData.toString()
+      }];
+      // _debug("transactionParameters",transactionParameters);
+      return provider.send("eth_sendTransaction",transactionParameters)
+      .then((result) => {
         return result;
       }).catch(function (e) {
         console.log('###--- eth_sendTransaction / error ----###');
         console.log(e);
+      });
     });
-
+    
     var txHashPromise = Promise.resolve(txHash);
     
     return txHashPromise.then((hashResult)=>{
@@ -181,6 +269,16 @@ function _encodeParameter(web3Obj,type,value) {
   web3Obj.eth.abi.encodeParameter(type,value);
 }
 
+
+export function _getGasEstimation(_provider, _toAccount, _data){
+  return _provider.estimateGas({
+    to: _toAccount,
+    data: _data,
+    }).then((result) => {
+      return result;
+    });
+}
+
 export function _getTransactionReceipt(_network, hashResult){
 
   let provider = _network.provider;
@@ -189,10 +287,8 @@ export function _getTransactionReceipt(_network, hashResult){
       setTimeout(() => {
         var receipt = null;
         while (receipt == null || receipt == ""){
-          var receipt = provider.request({
-            method: 'eth_getTransactionReceipt',
-            params: [hashResult.toString()],
-          }).then((receiptResult) =>{
+          var receipt =  provider.send("eth_getTransactionReceipt",[hashResult.toString()])
+          .then((receiptResult) =>{
             return receiptResult;
           });
         }
@@ -207,13 +303,11 @@ export function _watchAsset(_network, _account, _id){
   let contract = _account.contract;
   // _debug("contract",contract);
   var watchRequest = [];
-  var requestId = provider.request({method: 'wallet_watchAsset' ,
-      params: {
+  var requestId = provider.send("wallet_watchAsset", {
       type: 'ERC1155',
       options: {
         address: contract.toString(),
         tokenId: _id.toString()
-        },
         },
     })
     .then((success) => {

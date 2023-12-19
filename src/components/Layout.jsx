@@ -46,9 +46,9 @@ export function Body() {
 return (
         <div>
         {
-          (getNFTState !== null) ? 
+          (NFTBalance !== null && NFTBalance.length > 0)  ? 
           <CTabBody /> 
-          :  <></>
+          :  <p>Loading....</p>
 
         } 
         </div>
