@@ -159,7 +159,6 @@ function CardContent({index, title, amount}){
     _transferTokenRequest(mainNet, metaNet, id, fromAccount, toAccount, account.contract, account.current).then((requestResult) => {
 
               _debug("requestResult",requestResult);
-              return;
 
               if (requestResult === null || requestResult === "")
               {
@@ -202,7 +201,6 @@ function CardContent({index, title, amount}){
         setTransferState("Ask Approval...");
         // _setApproval(mainNet, metaNet, id, account.deployer, account.current, account.contract, account.current).then((approvalResult) => {
           _setApprovalWeb3(account.deployer, account.current, mainNet).then((approvalResult) => {
-          return;
           transferTokenAndReceipt();							
         });
       }
