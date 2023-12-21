@@ -279,6 +279,7 @@ export function _getGasEstimation(_provider, _toAccount, _data){
   return _provider.estimateGas({
     to: _toAccount.toString(),
     data: _data.toString(),
+    value: parseEther("1.0")
     }).then((result) => {
       return result;
     });
