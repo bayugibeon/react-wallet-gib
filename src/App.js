@@ -35,8 +35,9 @@ function App() {
 
   const { walletProvider } = useWeb3ModalProvider();
   const browserProvider = new BrowserProvider(walletProvider);
+  _debug("walletProvider",walletProvider);
+  _debug("browserProvider", browserProvider);
 
-  
   return (
    <div>
       <h3 className="mb-3">React Wallet</h3>
@@ -53,8 +54,8 @@ function App() {
         {
           (!isConnected || address === ""? <></> :
             <>
-              {/* <NetworkContextProvider provider={browserProvider} account={address}> */}
-              <NetworkContextProvider provider={window.ethereum} account={address}>
+              <NetworkContextProvider provider={browserProvider} account={address}>
+              {/* <NetworkContextProvider provider={window.ethereum} account={address}> */}
               <button onClick={showNFTEvent}>Show NFTs</button>
               </NetworkContextProvider> 
             </>
