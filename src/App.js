@@ -53,8 +53,8 @@ function App() {
         {
           (!isConnected || address === ""? <></> :
             <>
-              <NetworkContextProvider provider={browserProvider} account={address}>
-              {/* <NetworkContextProvider provider={window.ethereum} account={address}> */}
+              {/* <NetworkContextProvider provider={browserProvider} account={address}> */}
+              <NetworkContextProvider provider={window.ethereum} account={address}>
               <button onClick={showNFTEvent}>Show NFTs</button>
               </NetworkContextProvider> 
             </>

@@ -2,9 +2,12 @@ import React, { useEffect, useState }  from 'react';
 import { MetaMaskButton, MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 import {GetMetaNet, GetMainNet, GetAccount} from './Context';
 import NFT from '../model/NFTData';
-import {_promiseArrayResolver, _debug, _checkApproval, _setApproval, _setApprovalWeb3,
-  _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions-ether';
-import {NFTSupplier, NFTBalance, NFTs} from './Layout';
+// import {_promiseArrayResolver, _debug, _checkApproval, _setApproval, _setApprovalWeb3,
+//   _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions-ether';
+
+  import {_promiseArrayResolver, _debug, _checkApproval, _setApproval, 
+    _transferTokenRequest, _getTransactionReceipt, _watchAsset} from '../Functions';
+  import {NFTSupplier, NFTBalance, NFTs} from './Layout';
 import NetworkEtherClass from './../model/NetworkEtherClass';
 
 export function Supplier() {
@@ -199,8 +202,8 @@ function CardContent({index, title, amount}){
       _debug("isApproved",isApproved);
       if (!isApproved){
         setTransferState("Ask Approval...");
-        // _setApproval(mainNet, metaNet, id, account.deployer, account.current, account.contract, account.current).then((approvalResult) => {
-          _setApprovalWeb3(account.deployer, account.current, mainNet).then((approvalResult) => {
+         _setApproval(mainNet, metaNet, id, account.deployer, account.current, account.contract, account.current).then((approvalResult) => {
+          // _setApprovalWeb3(account.deployer, account.current, mainNet).then((approvalResult) => {
           transferTokenAndReceipt();							
         });
       }

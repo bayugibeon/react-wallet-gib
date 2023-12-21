@@ -20,8 +20,8 @@ export function NetworkContextProvider({provider, account, children}){
     const mainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
         process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
     const accountClass = new AccountClass(process.env.REACT_APP_ACCOUNT, account, process.env.REACT_APP_CONTRACT);
-    const metamaskNetwork = new NetworkEtherClass(walletProvider, account, AbiFile, process.env.REACT_APP_CONTRACT);
-    // const metamaskNetwork = new NetworkClass(walletProvider, account, AbiFile, process.env.REACT_APP_CONTRACT);
+    // const metamaskNetwork = new NetworkEtherClass(walletProvider, account, AbiFile, process.env.REACT_APP_CONTRACT);
+    const metamaskNetwork = new NetworkClass(walletProvider, account, AbiFile, process.env.REACT_APP_CONTRACT);
 
 
     return(
