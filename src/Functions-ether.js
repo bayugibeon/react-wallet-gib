@@ -239,24 +239,28 @@ export function _transferTokenRequest(_mainNetwork, _metaNetwork, _id, fromAccou
 
 
     // _debug("transactionParameters",transactionParameters);
-    const txHash = _getGasEstimation(provider, toAccount.toString(), encodedData).then((gasResult) => {
+    const txHash = _checkMetamask(provider).then((account) => {
+      return _getGasEstimation(provider, toAccount.toString(), encodedData).then((gasResult) => {
 
-
-      const transactionParameters = [{
-        to: contractAddress.toString(),
-        from: currentAccount.toString(),
-        gas: Number(gasResult).toString(),
-        data: encodedData.toString()
-      }];
-      // _debug("transactionParameters",transactionParameters);
-      return provider.send("eth_sendTransaction",transactionParameters)
-      .then((result) => {
-        return result;
-      }).catch(function (e) {
-        console.log('###--- eth_sendTransaction / error ----###');
-        console.log(e);
+        const transactionParameters = [{
+          to: contractAddress.toString(),
+          from: currentAccount.toString(),
+          gas: Number(gasResult).toString(),
+          data: encodedData.toString()
+        }];
+        // _debug("transactionParameters",transactionParameters);
+        return provider.send("eth_sendTransaction",transactionParameters)
+        .then((result) => {
+          return result;
+        }).catch(function (e) {
+          console.log('###--- eth_sendTransaction / error ----###');
+          console.log(e);
+          alert(e);
+        });
       });
+  
     });
+    
     
     var txHashPromise = Promise.resolve(txHash);
     

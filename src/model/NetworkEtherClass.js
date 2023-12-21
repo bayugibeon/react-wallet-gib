@@ -21,6 +21,10 @@ class NetworkEtherClass {
     
             this.contract = new Contract(_contract, this.abi, this.provider);
             this.contractTx = new Contract(_contract, this.abi, this.signer);
+
+            this.contractTx.defaultAccount = this.address;
+            this.contractTx.defaultBlock = "latest";
+    
         });
         // this.provider = new ethers.providers.Web3Provider(_provider);
         // this.web3 = new Web3(this.provider);

@@ -68,6 +68,11 @@ const App = () => {
       });
     };
 
+    const modalACcount = () => {
+      const { address, chainId, isConnected } = useWeb3ModalAccount();
+      const { walletProvider } = useWeb3ModalProvider();
+    }
+
             // .then(handleAccountsChanged)
         // window.ethereum.on('accountsChanged', handleAccountsChanged);
     
