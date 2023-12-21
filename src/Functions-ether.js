@@ -240,7 +240,7 @@ export function _transferTokenRequest(_mainNetwork, _metaNetwork, _id, fromAccou
 
     // _debug("transactionParameters",transactionParameters);
     const txHash = _checkMetamask(provider).then((account) => {
-      _debug("encodedData",encodedData);
+      _debug("account",account);
       return _getGasEstimation(provider, toAccount.toString(), encodedData).then((gasResult) => {
 
         const transactionParameters = [{
