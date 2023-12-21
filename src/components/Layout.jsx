@@ -24,6 +24,7 @@ export function Body() {
     const getData = async () => {
       let checkRequest = _checkMetamask(metaNet.provider);
       const nftInfo = await checkRequest.then((result) => {
+        _debug("result",result);
         return getNFTs(mainNet.contract, account);
         // return getNFTsEther(metaNet.contract, account);
       });

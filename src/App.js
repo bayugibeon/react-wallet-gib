@@ -32,6 +32,10 @@ function App() {
   const showNFTEvent = () => {
     setshowNFT(true);
   }
+
+  const { walletProvider } = useWeb3ModalProvider();
+  const browserProvider = new BrowserProvider(walletProvider);
+
   
   return (
    <div>
@@ -49,7 +53,8 @@ function App() {
         {
           (!isConnected || address === ""? <></> :
             <>
-              <NetworkContextProvider provider={window.ethereum} account={address}>
+              <NetworkContextProvider provider={browserProvider} account={address}>
+              {/* <NetworkContextProvider provider={window.ethereum} account={address}> */}
               <button onClick={showNFTEvent}>Show NFTs</button>
               </NetworkContextProvider> 
             </>
