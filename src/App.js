@@ -35,8 +35,6 @@ function App() {
 
   const { walletProvider } = useWeb3ModalProvider();
   const browserProvider = new BrowserProvider(walletProvider);
-  _debug("walletProvider",walletProvider);
-  _debug("browserProvider", browserProvider);
 
   return (
    <div>

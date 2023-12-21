@@ -58,8 +58,8 @@ export function wallet_requestPermissions(provider) {
       })
       .catch((err) => {
         return "error";
-        // console.log('!!!--- ERROR ----!!!');
-        // console.log(err);
+        console.log('!!!--- ERROR ----!!!');
+        console.log(err);
       });
     }     
   return result;
