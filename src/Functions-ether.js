@@ -1,4 +1,5 @@
 import {GetMetaNet, GetMainNet, GetAccount} from './components/Context';
+import {parseEther} from 'ethers';
 
 export function _checkMetamask(provider) {
     var account = null;
