@@ -34,9 +34,12 @@ function App() {
     setshowNFT(true);
   }
 
+  
+
+
   const { walletProvider } = useWeb3ModalProvider();
   const browserProvider = new BrowserProvider(walletProvider);
-
+  _debug(ethProvider);
   return (
    <div>
       <h3 className="mb-3">React Wallet</h3>
@@ -64,8 +67,10 @@ function App() {
     );
 }
 
-const walletProvider = await EthereumProvider.init({
-  projectId, // REQUIRED your projectId
+
+
+const ethProvider = EthereumProvider.init({
+  projectId : projectId, // REQUIRED your projectId
   // showQrModal, // REQUIRED set to "true" to use @walletconnect/modal
 
   // /* Optional Namespaces - RECOMMENDED FOR MULTI-CHAIN APPS */
@@ -74,7 +79,7 @@ const walletProvider = await EthereumProvider.init({
   // optionalEvents, // ethereum events - all ethereum events are already set by default so this is not required
 
   // /* Required Namespaces - NOT RECOMMENDED FOR MULTI-CHAIN APPS*/
-  // chains, //  chain ids
+  chains : [80001], //  chain ids
   // methods, // ethereum methods
   // events, // ethereum events
   
@@ -82,5 +87,4 @@ const walletProvider = await EthereumProvider.init({
   // metadata, // OPTIONAL metadata of your app
   // qrModalOptions // OPTIONAL - `undefined` by default, see https://docs.walletconnect.com/web3modal/options
 });
-
 export default App;
