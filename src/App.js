@@ -12,6 +12,7 @@ import { useWeb3Modal, createWeb3Modal, defaultConfig,
   useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 import {ethers} from 'ethers';
+import { EthereumProvider } from '@walletconnect/ethereum-provider'
 
 createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
@@ -33,9 +34,10 @@ function App() {
     setshowNFT(true);
   }
 
-  const { walletProvider } = useWeb3ModalProvider();
-  const browserProvider = new BrowserProvider(walletProvider);
+  // const { walletProvider } = useWeb3ModalProvider();
+  // const browserProvider = new BrowserProvider(walletProvider);
 
+  _debug("walletProvider",walletProvider);
   return (
    <div>
       <h3 className="mb-3">React Wallet</h3>
@@ -52,8 +54,8 @@ function App() {
         {
           (!isConnected || address === ""? <></> :
             <>
-              {/* <NetworkContextProvider provider={browserProvider} account={address}> */}
-              <NetworkContextProvider provider={window.ethereum} account={address}>
+              <NetworkContextProvider provider={walletProvider} account={address}>
+              {/* <NetworkContextProvider provider={window.ethereum} account={address}> */}
               <button onClick={showNFTEvent}>Show NFTs</button>
               </NetworkContextProvider> 
             </>
@@ -62,5 +64,24 @@ function App() {
     </div>
     );
 }
+
+const walletProvider = await EthereumProvider.init({
+  projectId, // REQUIRED your projectId
+  // showQrModal, // REQUIRED set to "true" to use @walletconnect/modal
+
+  // /* Optional Namespaces - RECOMMENDED FOR MULTI-CHAIN APPS */
+  // optionalChains, // chains - required for optional namespaces
+  // optionalMethods, // ethereum methods - all ethereum methods are already set by default so this is not required
+  // optionalEvents, // ethereum events - all ethereum events are already set by default so this is not required
+
+  // /* Required Namespaces - NOT RECOMMENDED FOR MULTI-CHAIN APPS*/
+  // chains, //  chain ids
+  // methods, // ethereum methods
+  // events, // ethereum events
+  
+  // rpcMap, // OPTIONAL rpc urls for each chain
+  // metadata, // OPTIONAL metadata of your app
+  // qrModalOptions // OPTIONAL - `undefined` by default, see https://docs.walletconnect.com/web3modal/options
+});
 
 export default App;
