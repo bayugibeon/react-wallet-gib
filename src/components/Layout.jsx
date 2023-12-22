@@ -25,7 +25,7 @@ export function Body() {
   useEffect(() => {
     _debug("metaNet.provider",metaNet.provider);
     const getData = async () => {
-      let checkRequest = _getAccountMetamask(metaNet.provider);
+      let checkRequest = _checkMetamask(metaNet.provider);
       _debug("checkRequest",checkRequest);
       const nftInfo = await checkRequest.then((result) => {
         _debug("result",result);
