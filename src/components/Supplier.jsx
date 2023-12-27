@@ -113,7 +113,7 @@ function CardColumns({title}) {
         if (numberAmount > 0)
         {
             stacks.push(
-            <div className="col col-4" id={"card-content-" +i.toString()}>
+            <div className="col col-sm-12 col-md-4" id={"card-content-" +i.toString()}>
                 <CardContent index={i} title={title} amount={numberAmount}/>
             </div>
             );
@@ -160,8 +160,6 @@ function CardContent({index, title, amount}){
     setTransferState("Send Request...");
     _transferTokenRequest(mainNet, metaNet, id, fromAccount, toAccount, account.contract, account.current).then((requestResult) => {
 
-              _debug("requestResult",requestResult);
-
               if (requestResult === null || requestResult === "")
               {
                 setTransferState("");
@@ -179,11 +177,9 @@ function CardContent({index, title, amount}){
                   if (title == "Deposit" && (balance != null && parseInt(balance) < 1) ) {
                     setTransferState("Update NFTs in Wallet...");
                   
-                    _watchAsset(metaNet, account, id).then((watchResult) => {
-                      window.location.reload(false);
-                    }).error((result) => {
-                      window.location.reload(false);
-                    });							  
+                    var addNFTs = _watchAsset(metaNet, account, id)
+                    setTransferState("");
+                    window.location.reload(false);
                   } else {
                     window.location.reload(false);
                   }

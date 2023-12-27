@@ -16,6 +16,7 @@ export let NFTs = [];
 export function Body() {
   // const [metaNet, setMetaNet] = useState();
   const [getNFTState, setgetNFTState] = useState(null);
+  const [getCurAccount, setgetCurAccount] = useState("");
 
   const mainNet = GetMainNet();
   const metaNet = GetMetaNet();;
@@ -23,12 +24,10 @@ export function Body() {
 
 
   useEffect(() => {
-    _debug("metaNet.provider",metaNet.provider);
     const getData = async () => {
       let checkRequest = _checkMetamask(metaNet.provider);
-      _debug("checkRequest",checkRequest);
       const nftInfo = await checkRequest.then((result) => {
-        _debug("result",result);
+        setgetCurAccount(result);
         return getNFTs(mainNet.contract, account);
         // return getNFTsEther(metaNet.contract, account);
       });
@@ -41,7 +40,7 @@ export function Body() {
     //   // 
     // });  
   
-  },getNFTState)
+  },[getCurAccount])
 
   if (getNFTState != null) {   
     NFTSupplier = getNFTState[0];
