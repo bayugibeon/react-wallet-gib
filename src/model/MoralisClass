@@ -1,0 +1,27 @@
+<!-- {
+  "page": 1,
+  "page_size": 100,
+  "cursor": null,
+  "result": [],
+  "status": "SYNCED"
+} -->
+
+<!-- {
+  "token_address": "0x2e83eef5b1f9318c997dd489a78d37a30dff9a4a",
+  "token_id": "1",
+  "owner_of": "0x72ee968714e3b91b958f206e19c798801a927b15",
+  "block_number": "44057928",
+  "block_number_minted": "41376568",
+  "token_hash": "1e810f42d4394b2b69e04daeb763ae73",
+  "amount": "1",
+  "possible_spam": false,
+  "contract_type": "ERC1155",
+  "name": null,
+  "symbol": null,
+  "token_uri": "https://ipfs.moralis.io:2053/ipfs/bafybeigkf7s5m3sd3e7jvmabvyjbjmrsrksxmlbhm77qbi5eqb6mvoa3nu/1.json",
+  "metadata": "{\"name\":\"Bastard Sword\",\"description\":\"Bastard Sword\",\"image\":\"https://ipfs.io/ipfs/bafkreieqpt4yggrrsufqiktowgv32cevz4woxpwz2wcidzfxqqkjsu74bm\"}",
+  "last_token_uri_sync": "2023-10-19T06:21:28.869Z",
+  "last_metadata_sync": "2024-01-03T12:32:36.833Z",
+  "minter_address": "ERC1155 tokens don't have a single minter",
+  "verified_collection": false
+} -->

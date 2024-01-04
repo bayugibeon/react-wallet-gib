@@ -27,14 +27,24 @@ export function WalletConnector() {
             <Button >Connect</Button>
     );
 }
-export const mainnet = {
+const mumbai = {
   chainId: 80001,
   name: 'Mumbai',
   currency: 'MATIC',
   explorerUrl: 'https://mumbai.polygonscan.com',
   rpcUrl: 'https://polygon-mumbai-pokt.nodies.app'
 }
-  
+
+const polygon = {
+  chainId: 137,
+  name: 'Polygon',
+  currency: 'MATIC',
+  explorerUrl: 'https://polygonscan.com',
+  rpcUrl: 'https://polygon-rpc.com/'
+}
+
+export const mainnet = mumbai;
+
 export const metadata = {
     name: 'My Website',
     description: 'My Website description',

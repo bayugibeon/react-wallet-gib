@@ -13,11 +13,11 @@ const MetamaskNetContext = createContext();
 const MainNetContext = createContext();
 const AccountContext = createContext();
 
-export function NetworkContextProvider({provider, account, children}){
+export function NetworkContextProvider({provider, chain, account, children}){
     // const { walletProvider } = provider()
     const mainNetwork = new NetworkClass(process.env.REACT_APP_RPC, process.env.REACT_APP_ACCOUNT, AbiFile, 
         process.env.REACT_APP_CONTRACT, process.env.REACT_APP_KEY);
-    const accountClass = new AccountClass(process.env.REACT_APP_ACCOUNT, account, process.env.REACT_APP_CONTRACT);
+    const accountClass = new AccountClass(process.env.REACT_APP_ACCOUNT, account, process.env.REACT_APP_CONTRACT, chain);
     const metamaskNetwork = new NetworkEtherClass(provider, account, AbiFile, process.env.REACT_APP_CONTRACT);
     // const metamaskNetwork = new NetworkClass(window.ethereum, account, AbiFile, process.env.REACT_APP_CONTRACT);
 

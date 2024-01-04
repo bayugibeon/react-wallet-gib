@@ -6,6 +6,7 @@ import {_checkMetamask, _promiseArrayResolver, _debug, _checkApproval, _setAppro
 // import {_checkMetamask, _promiseArrayResolver, _debug, _checkApproval, _setApproval,
 //     _transferTokenRequest, _getTransactionReceipt, _watchAsset, _getAccountMetamask} from '../Functions';
   import {Supplier} from './Supplier';
+  import Blockchain from './Blockchain';
 // import {Collections} from './Users';
 // import {Wallets} from './Wallets';
 
@@ -169,6 +170,9 @@ function CTabBody(){
                     <a href="#supplier" className="nav-link active" aria-current="true" data-bs-toggle="tab" >Supplier</a>
                 </li>
                 <li className="nav-item">
+                  <a href="#ublockchain" className="nav-link"  data-bs-toggle="tab" >Blockchain</a>
+                </li>
+                <li className="nav-item">
                   <a href="#users" className="nav-link"  data-bs-toggle="tab" >Users</a>
                 </li>
                 <li className="nav-item">
@@ -178,6 +182,7 @@ function CTabBody(){
         </div>
         <form className="card-body tab-content">
             <ContentSupplier />
+            <ContentBlockchain />
             <ContentUsers />
             <ContentWallets />
         </form>
@@ -194,6 +199,12 @@ function ContentSupplier(){
     </div>);
 }
 
+function ContentBlockchain(){
+  return (
+      <div className="tab-pane active" id="blockchain">
+        <Blockchain />
+    </div>);
+}
 
 function ContentUsers(){
   return (

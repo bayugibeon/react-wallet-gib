@@ -13,6 +13,7 @@ class NetworkEtherClass {
     constructor(_provider, _address, _abi, _contract, _web3 = null, _privatekey = null) {
         
         this.provider =  new BrowserProvider(_provider);
+        // this.provider =  _provider;
         this.provider.getSigner().then((result) => {
             this.signer = result;
             this.address = _address;

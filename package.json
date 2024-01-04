@@ -11,6 +11,7 @@
     "@metamask/sdk-react": "^0.14.0",
     "@metamask/sdk-react-ui": "^0.14.1",
     "@mui/material": "^5.14.19",
+    "@quicknode/sdk": "^2.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

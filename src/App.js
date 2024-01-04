@@ -13,35 +13,29 @@ import { useWeb3Modal, createWeb3Modal, defaultConfig,
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 import {ethers} from 'ethers';
 import { EthereumProvider } from '@walletconnect/ethereum-provider'
-import {isMobile} from 'react-device-detect';
+import {browserName, isMobile} from 'react-device-detect';
 
 createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
-  chains: [mainnet],
+  chains: mainnet,
   projectId
 });
 
 
 function App() {
   const [initLoad, setInitLoad] = useState('Done');
-
   const { address, chainId, isConnected } = useWeb3ModalAccount()
-
   const [showNFT, setshowNFT] = useState(false);
-  
   const { open } = useWeb3Modal();
 
   const showNFTEvent = () => {
     setshowNFT(true);
   }
 
-  
-
-
   const { walletProvider } = useWeb3ModalProvider();
-  const browserProvider = new BrowserProvider(walletProvider);
-
-  const getProvider = isMobile ? walletProvider : window.ethereum;
+  // const browserProvider = new BrowserProvider(walletProvider);
+  const pcProvider = browserName === "Chrome" ? walletProvider : window.ethereum;
+  const getProvider = isMobile ? walletProvider : pcProvider;
 
   return (
    <div>
@@ -58,7 +52,7 @@ function App() {
 
         {
           (!isConnected || address === ""? <></> :
-            <NetworkContextProvider provider={getProvider} account={address}>:
+            <NetworkContextProvider provider={getProvider} chain={chainId} account={address}>:
               <button onClick={showNFTEvent}>Show NFTs</button>
             </NetworkContextProvider> 
           )
