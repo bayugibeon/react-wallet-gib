@@ -20,3 +20,8 @@ code {
 .width-200 {
   width: 200px;
 }
+
+.nft-image {
+  max-width: 200px;
+  max-height: 200px;
+}
