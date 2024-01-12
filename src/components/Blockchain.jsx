@@ -47,6 +47,7 @@ const Blockchain = () => {
         setAccountChangedState(accountState);
 
       }
+
       switch (flag) {
         case 0:
             cursorParam = '&cursor=' + "";          
@@ -90,6 +91,7 @@ const Blockchain = () => {
           _debug('fetch error',err.message);
       });
 
+      window.scrollTo(0, 0);
     }  
   }
 
@@ -145,7 +147,7 @@ const Blockchain = () => {
         {(apiResult !== null && apiResult.result.length > 0) ? 
         <>
           <h4>Found {apiResult.result.length} NFTs</h4>
-          <ViewNFTMetadata data={apiResult.result}/>
+          <ViewNFTMetadata data={apiResult.result} lastItemCount={(currentPageState - 1) * contentPerPage}/>
           <div className="mt-1 text-center">
             <div className="mb-3">
               <h4>Page : {currentPageState}</h4>
@@ -177,14 +179,13 @@ const Blockchain = () => {
 
 export default Blockchain;
 
-function ViewNFTMetadata(data) {
-  const dataArray = data.data;
+function ViewNFTMetadata({data, lastItemCount}) {
   let htmlResult = [];
 
-  for(var nfts=0;nfts < dataArray.length;nfts++) {
-    let keyNames = Object.keys(dataArray[nfts]);
+  for(var nfts=0;nfts < data.length;nfts++) {
+    let keyNames = Object.keys(data[nfts]);
     let columnResult = [];
-    let nftData = Object.values(dataArray[nfts]);
+    let nftData = Object.values(data[nfts]);
     for (var i=0;i < keyNames.length;i++)
      {
       if (nftData[i] === null) {
@@ -227,7 +228,7 @@ function ViewNFTMetadata(data) {
       <div className="col col-sm-12 col-md-6 mb-5">
           <div className="card">
           <div className="h3 card-title bold text-center">
-            {nfts+1}
+            {lastItemCount + nfts + 1}
           </div>
             <div className="card-body">
               <div className="row">
@@ -249,7 +250,7 @@ function ComponentTree({data}) {
   
   let metaObj = [];
 
-  if (data.constructor.name === "String") //first layer of input is String, further layer become Object because JSON parsing
+  if (data.constructor.name === "String") //first layer of input from metadata is String, further layer become Object because JSON parsing
   {
     metaObj = JSON.parse(data);
   }
@@ -281,7 +282,7 @@ function ComponentTree({data}) {
                 <>
                       <div className="card-text">
                         {
-                          (metaKeys[index].includes('image') || metaKeys[index].includes('pic') || metaKeys[index].includes('img')) ? 
+                          (!metaKeys[index].includes('url') && (metaKeys[index].includes('image') || metaKeys[index].includes('picture') || metaKeys[index].includes('img'))) ? 
                           <img className="nft-image" src={value} alt="Card image cap"/>
                           : 
                           value
